@@ -25,7 +25,7 @@ function Provenance() {
 // modifier to allow only admin to execute a function
 modifier onlyAdmin() {
     if (msg.sender != admin) throw;
-    ;
+    _;
 }
 
 // function for producer to add their details to database
