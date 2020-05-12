@@ -11,6 +11,7 @@ struct Producer {
     string cityState;
     string country;
     bool certified;
+    string T;
 }
 
 struct Product {
@@ -19,11 +20,11 @@ struct Product {
     uint timeStamp;
 }
 // constructor - runs once when contract is deployed
-function Provenance() {
+    function Provenance() {
     admin = msg.sender;
 }
 // modifier to allow only admin to execute a function
-modifier onlyAdmin() {
+    modifier onlyAdmin() {
     if (msg.sender != admin) throw;
     _;
 }
@@ -37,15 +38,15 @@ function addProducer(string _name, uint _phoneNo, string _cityState, string _cou
     producers[msg.sender].cityState = _cityState;
     producers[msg.sender].country = _country;
     producers[msg.sender].certified = false;
-
-return true;
-}
-else {
-return false; // either entry already exists or name entered was null
-  }
+    
+    return true;
+    }
+    else {
+    return false; // either entry already exists or name entered was null
+      }
 }
 // function to remove producer from database (can only be done by admin)
-function removeProducer(address _producer) onlyAdmin returns (boolsuccess) { delete producers [_producer];
+function removeProducer(address _producer) onlyAdmin returns (bool success) { delete producers [_producer];
   return true;
 }
 // function to display details of producer
@@ -62,28 +63,26 @@ function certifyProducer(address _producer) onlyAdmin returns (bool success) {
 // function for producer to add their product to database
 function addProduct(string serialNo, uint[] _locationData) returns (bool success) {
 // ensure no duplicate serial numbers and serial number isn't null
-    if (products[serialNo].producer == OxO &&
-    bytes(serialNo).length != 0) {
+    if (products[serialNo].producer == 0x0 && bytes(serialNo).length != 0) {
     products [serialNo].producer = msg.sender;
     products[serialNo].locationData = _locationData;
-    products[serialNol.timeStamp = block.timestamp;
+    products[serialNo].timeStamp = block.timestamp;
     return true;
 }
 
 else {
-  return false; // either serial number already in use or
-  serial number entered was null
+  return false; // either serial number already in use or serial number entered was null
 }
 }
 // function to remove product from database (can only be done by admin)
 function removeProduct(string serialNo) onlyAdmin returns (bool success) {
-  delete products [serialNo];
-  return true;
-}
+      delete products [serialNo];
+      return true;
+    }
 // function to display details of product
 function findProduct(string serialNo) constant returns (address, uint[], uint) {
-  return (products[serialNo].producer,
-  products [serialNo] .locationData, products[serialNo] .timeStamp);
+    return (products[serialNo].producer,
+    products [serialNo] .locationData, products[serialNo] .timeStamp);
   }
 }
 
@@ -108,7 +107,7 @@ struct Shipment {
 
 // events to display messages when certain transactions are executed
   event Success(string _message, string trackingNo, uint[] _locationData, uint _timeStamp, address _sender);
-  event Payment(string _message, address _from, address _to, _amount); event Failure(string _message);
+  event Payment(string _message, address _from, address _to, uint _amount); event Failure(string _message);
 // constructor - runs once when contract is deployed
 // determine initial token supply upon contract deployment
 function Tracking(uint _initialTokenSupply) {
@@ -117,7 +116,7 @@ function Tracking(uint _initialTokenSupply) {
 }
 // modifier to allow only admin to execute a function
 modifier onlyAdmin() {
-  if (msg.sender admin) throw;
+  if (msg.sender !=admin) throw;
   _;
 }
 
@@ -204,9 +203,8 @@ function checkSuccess(address _sender) constant returns (uint, uint) {
   }
 // function to calculate reputation score of a party (percentage of successfully completed shipments)
 function calculateReputation(address _sender) constant returns (uint) {
-    if (totalShipped[_sender] 0) {
-        return (100 * successShipped[_sender]
-    totalShipped[_sender]);
+    if (totalShipped[_sender] !=0) {
+        return (100 * successShipped[_sender] / totalShipped[_sender]);
       }
      else {
       return 0;
